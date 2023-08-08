@@ -1,0 +1,1 @@
+export default " bg-slate-300 p-4 border-2 border-slate-500 rounded-md dark:bg-slate-800 dark:border-slate-700 dark:text-slate-200 "
