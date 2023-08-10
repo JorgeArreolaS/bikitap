@@ -1,17 +1,15 @@
 import HStack from 'components/HStack';
+import Showlist from 'components/Showlist';
 import VStack from 'components/VStack';
 import DisplayText from 'components/ui/DisplayText';
 import Taps from 'components/ui/Taps';
-import {
-  useTap
-} from 'hooks/useTap';
+import { useTap } from 'hooks/useTap';
 import { useEffect, useState } from 'react';
 
 function App() {
   const [text, setText] = useState<string>('');
 
-  const { handlePress } = useTap();
-
+  const { handlePress, value } = useTap();
 
   const handleKeyDown = (e: KeyboardEvent) => {
     handlePress(e.key, true);
@@ -30,7 +28,10 @@ function App() {
     };
   }, []);
 
-  useEffect(() => {}, [text]);
+  useEffect(() => {
+    if (value === null || value.parsed === null) return;
+    handleTrigger(value.parsed);
+  }, [value]);
 
   function handleTrigger(value: string | number) {
     if (typeof value === 'string') return add(value);
@@ -38,12 +39,12 @@ function App() {
       case 27:
         break;
       case 28:
-        backspace();
+        clear();
         break;
       case 29:
         break;
       case 30:
-        clear();
+        backspace();
         break;
       case 31:
         add(' ');
@@ -63,15 +64,15 @@ function App() {
 
   return (
     <VStack className="flex h-screen w-full flex-col gap-5 p-10">
-      {/* <Showlist /> */}
+      <Showlist />
       <HStack className="h-full gap-3">
         <VStack className="w-full">
           <VStack className="relative">
-            <h1 className="text-center font-mono text-3xl font-bold">{text}</h1>
+            <h1 className="text-center font-mono text-6xl font-bold">{text}</h1>
             <div className="absolute left-0 top-0 rounded-md opacity-10 dark:text-white">
               <pre>
                 <code>
-                {/* {cache.map((item, i) => `${item.value} - ${item.time.toISOString()}`).join('\n')} */}
+                  {/* {cache.map((item, i) => `${item.value} - ${item.time.toISOString()}`).join('\n')} */}
                 </code>
               </pre>
             </div>
