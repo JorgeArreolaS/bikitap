@@ -4,10 +4,10 @@ import { cn } from 'utils';
 import HStack from './HStack';
 import VStack from './VStack';
 import { useAtomValue } from 'jotai';
-import { isSelectedAtom, valueAtom, valuesAtom } from 'hooks/useTap';
+import { realtimeKeyboardAtom, valuesAtom } from 'hooks/useTap';
 
 const Showlist = () => {
-  const list = useAtomValue(valuesAtom);
+  const { layout: list } = useAtomValue(realtimeKeyboardAtom);
 
   return (
     <VStack
@@ -61,19 +61,17 @@ const Item: React.FC<{
   value: number;
   label?: string;
 }> = ({ value, label }) => {
-  const currentValue = useAtomValue(valueAtom);
-  const isSelected = useAtomValue(isSelectedAtom);
-  const current = useMemo(() => currentValue.numeric == value, [currentValue, value]);
+  const realtime = useAtomValue(realtimeKeyboardAtom);
+  const currentValue = useMemo(() => realtime.value, [realtime]);
+  const current = useMemo(() => currentValue == value, [currentValue, value]);
 
   const colors = useMemo(() => {
-    if (currentValue.numeric == 0) return '';
-    if (current && isSelected)
-      return 'bg-blue-500 border-blue-500 text-blue-900 dark:bg-sky-400 dark:border-sky-400 dark:text-sky-400';
+    if (currentValue == 0) return '';
     if (current) {
       return 'bg-sky-400 border-sky-500 text-sky-900 dark:bg-blue-400 dark:border-blue-400 dark:text-blue-400 ';
     }
     return '';
-  }, [value, currentValue, isSelected]);
+  }, [value, currentValue]);
 
   return (
     <HStack className={cn(['relative mx-auto w-min gap-2'])}>
@@ -81,7 +79,7 @@ const Item: React.FC<{
         className={cn([
           'bg-opacity-5 dark:bg-opacity-5',
           colors,
-          (!current || currentValue.numeric === 0) && 'hidden',
+          (!current || currentValue === 0) && 'hidden',
         ])}
       />
       <HStack className="gap-1">

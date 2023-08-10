@@ -9,7 +9,12 @@ import { useEffect, useState } from 'react';
 function App() {
   const [text, setText] = useState<string>('');
 
-  const { handlePress, value } = useTap();
+  const { handlePress } = useTap({
+    onNewValue(value) {
+      if (value === null) return;
+      handleTrigger(value);
+    },
+  });
 
   const handleKeyDown = (e: KeyboardEvent) => {
     handlePress(e.key, true);
@@ -28,23 +33,18 @@ function App() {
     };
   }, []);
 
-  useEffect(() => {
-    if (value === null || value.parsed === null) return;
-    handleTrigger(value.parsed);
-  }, [value]);
-
   function handleTrigger(value: string | number) {
     if (typeof value === 'string') return add(value);
     switch (value) {
       case 27:
         break;
       case 28:
-        clear();
+        backspace();
         break;
       case 29:
         break;
       case 30:
-        backspace();
+        clear();
         break;
       case 31:
         add(' ');
