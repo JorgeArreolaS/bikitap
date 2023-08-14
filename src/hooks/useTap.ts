@@ -1,5 +1,5 @@
 import { createKeyboardAtom } from 'core/KeyboardAtom';
-import { atom, useAtom } from 'jotai';
+import { useAtom } from 'jotai';
 import { useCallback, useEffect, useMemo } from 'react';
 
 export const realtimeKeyboardAtom = createKeyboardAtom({});
@@ -12,16 +12,27 @@ interface useTapProps {
 export const useTap = ({ onNewValue }: useTapProps) => {
   const [realtimeKeyboard, dispatchRealtimeKeyboard] =
     useAtom(realtimeKeyboardAtom);
-  const [delayedKeyboard, dispatchDelayedKeyboard] = useAtom(delayedKeyboardAtom);
+  const [delayedKeyboard, dispatchDelayedKeyboard] =
+    useAtom(delayedKeyboardAtom);
 
   useEffect(() => {
     if (!realtimeKeyboard.isPressed) {
-      onNewValue?.(delayedKeyboard.label)
+      onNewValue?.(delayedKeyboard.label);
       dispatchDelayedKeyboard({
-        type: 'clear',
+        type: 'clear'
       });
     }
   }, [realtimeKeyboard]);
+
+  useEffect(() => {
+    if (realtimeKeyboard.layout.id !== delayedKeyboard.layout.id)
+      dispatchDelayedKeyboard({
+        type: 'setLayout',
+        payload: {
+          id: realtimeKeyboard.layout.id
+        }
+      });
+  }, [realtimeKeyboard.layout, delayedKeyboard.layout]);
 
   const keys = useMemo(() => realtimeKeyboard.map, [realtimeKeyboard]);
 
@@ -34,15 +45,15 @@ export const useTap = ({ onNewValue }: useTapProps) => {
       type: 'updatePress',
       payload: {
         index,
-        value: true,
-      },
+        value: true
+      }
     });
     dispatchRealtimeKeyboard({
       type: 'updatePress',
       payload: {
         index,
-        value,
-      },
+        value
+      }
     });
   }, []);
 
@@ -57,6 +68,6 @@ export const useTap = ({ onNewValue }: useTapProps) => {
   );
 
   return {
-    handlePress,
+    handlePress
   };
 };

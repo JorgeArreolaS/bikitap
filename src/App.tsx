@@ -63,28 +63,32 @@ function App() {
   }
 
   return (
-    <VStack className="flex h-screen w-full flex-col gap-5 p-10">
-      <Showlist />
-      <HStack className="h-full gap-3">
-        <VStack className="w-full">
-          <VStack className="relative">
-            <h1 className="text-center font-mono text-6xl font-bold">{text}</h1>
-            <div className="absolute left-0 top-0 rounded-md opacity-10 dark:text-white">
-              <pre>
-                <code>
-                  {/* {cache.map((item, i) => `${item.value} - ${item.time.toISOString()}`).join('\n')} */}
-                </code>
-              </pre>
-            </div>
-          </VStack>
+    <main className='dark text-foreground bg-background'>
+      <VStack className="flex h-screen w-full flex-col gap-5 p-10">
+        <Showlist />
+        <HStack className="h-full gap-3">
+          <VStack className="w-full">
+            <VStack className="relative">
+              <h1 className="text-center font-mono text-6xl font-bold">
+                {text}
+              </h1>
+              <div className="absolute left-0 top-0 rounded-md opacity-10 dark:text-white">
+                <pre>
+                  <code>
+                    {/* {cache.map((item, i) => `${item.value} - ${item.time.toISOString()}`).join('\n')} */}
+                  </code>
+                </pre>
+              </div>
+            </VStack>
 
-          <VStack className="h-full  items-center justify-center">
-            <DisplayText />
+            <VStack className="h-full  items-center justify-center">
+              <DisplayText />
+            </VStack>
           </VStack>
-        </VStack>
-      </HStack>
-      <Taps />
-    </VStack>
+        </HStack>
+        <Taps />
+      </VStack>
+    </main>
   );
 }
 

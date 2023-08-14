@@ -1,27 +1,46 @@
 import React, { FC, useMemo } from 'react';
-import boxStyle from 'styles/boxStyle';
 import { cn } from 'utils';
 import HStack from './HStack';
 import VStack from './VStack';
-import { useAtomValue } from 'jotai';
+import { useAtom, useAtomValue } from 'jotai';
 import { realtimeKeyboardAtom, valuesAtom } from 'hooks/useTap';
+import { Card, CardHeader, CardBody, CardFooter } from '@nextui-org/react';
+import { Tabs, Tab } from '@nextui-org/react';
 
 const Showlist = () => {
-  const { layout: list } = useAtomValue(realtimeKeyboardAtom);
+  const [{ layout, layouts }, dispatchKeyboard] = useAtom(realtimeKeyboardAtom);
 
   return (
-    <VStack
-      className={cn([
-        boxStyle,
-        'flex flex-col border-opacity-40 bg-opacity-40 p-2',
-      ])}
-    >
-      <VStack className="grid w-full grid-flow-col grid-rows-8 gap-y-1 lg:grid-rows-4">
-        <Item value={0} label="0" />
-        {list.map((item, i) => (
-          <Item key={i} value={i + 1} label={item.toString()} />
-        ))}
-      </VStack>
+    <VStack>
+      <Tabs
+        aria-label="Dynamic tabs"
+        items={layouts}
+        variant="bordered"
+        selectedKey={layout.id}
+        onSelectionChange={(key) =>
+          dispatchKeyboard({
+            type: 'setLayout',
+            payload: {
+              id: String(key)
+            }
+          })
+        }
+      >
+        {(item) => (
+          <Tab key={item.id} title={item.label}>
+            <Card className="overflow-visible">
+              <CardBody className={cn(['h-auto overflow-y-visible'])}>
+                <VStack className="grid w-full grid-flow-col grid-rows-8 gap-y-1 lg:grid-rows-4">
+                  <Item value={0} label="0" />
+                  {item.values.map((item, i) => (
+                    <Item key={i} value={i + 1} label={item.toString()} />
+                  ))}
+                </VStack>
+              </CardBody>
+            </Card>
+          </Tab>
+        )}
+      </Tabs>
     </VStack>
   );
 };
@@ -32,7 +51,7 @@ const ItemHighlight: FC<{ className?: string }> = ({ className }) => (
   <div
     className={cn([
       'absolute z-50 h-full w-full scale-x-[1.08] scale-y-[1.5] rounded-sm border-2 bg-opacity-10',
-      className,
+      className
     ])}
   ></div>
 );
@@ -41,7 +60,7 @@ const ItemBox: FC<{ className?: string }> = ({ className }) => (
   <div
     className={cn([
       ' aspect-square w-4 rounded-sm border-2 border-slate-500 bg-slate-500 dark:border-slate-500 dark:border-opacity-30 dark:bg-slate-300 ',
-      className,
+      className
     ])}
   ></div>
 );
@@ -79,7 +98,7 @@ const Item: React.FC<{
         className={cn([
           'bg-opacity-5 dark:bg-opacity-5',
           colors,
-          (!current || currentValue === 0) && 'hidden',
+          (!current || currentValue === 0) && 'hidden'
         ])}
       />
       <HStack className="gap-1">
@@ -89,7 +108,7 @@ const Item: React.FC<{
             className={cn([
               'bg-red-400',
               colors,
-              value == 0 && 'bg-opacity-0 dark:bg-opacity-0',
+              value == 0 && 'bg-opacity-0 dark:bg-opacity-0'
             ])}
           />
         ))}
@@ -98,7 +117,7 @@ const Item: React.FC<{
         className={cn([
           'w-5 font-mono leading-none text-slate-700 dark:text-slate-200',
           colors,
-          'bg-opacity-0 dark:bg-opacity-0',
+          'bg-opacity-0 dark:bg-opacity-0'
         ])}
       >
         {label}
