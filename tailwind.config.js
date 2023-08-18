@@ -1,3 +1,6 @@
+import TailwindTheme from "./src/core/config/tailwind";
+
+// eslint-disable-next-line @typescript-eslint/no-var-requires, no-undef
 const { nextui } = require("@nextui-org/react");
 
 /** @type {import('tailwindcss').Config} */
@@ -8,15 +11,7 @@ export default {
         './node_modules/@nextui-org/theme/dist/**/*.{js,ts,jsx,tsx}'
 
   ],
-  theme: {
-    extend: {
-       gridTemplateRows: {
-        // Simple 8 row grid
-        '7': 'repeat(7, minmax(0, 1fr))',
-        '8': 'repeat(8, minmax(0, 1fr))',
-      }
-    },
-  },
+  theme: TailwindTheme,
   darkMode: "class",
   plugins: [nextui()]
 };

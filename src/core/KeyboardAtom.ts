@@ -5,6 +5,7 @@ const DEFAULTS: {
   map: string[];
   layouts: KeyboardLayout[];
 } = {
+  // map: [' ', 'k', 'o', 'p', '\''],
   map: [' ', 'j', 'i', 'o', ';'],
   layouts: [
     {
