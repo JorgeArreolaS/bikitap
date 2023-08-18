@@ -11,11 +11,13 @@ import { useAtomValue } from 'jotai';
 import { Color, Euler, MeshBasicMaterial } from 'three';
 import { Bloom, EffectComposer } from '@react-three/postprocessing';
 
+const globalRotation = new Euler(-Math.PI / 2, 0, 0);
+const green = new Color(0, 1.5, 0);
+const white = new Color(0xffffff);
+
 const Hyperspace = () => {
-  // const [items] = useState(Array(5).fill(0));
   const realtime = useAtomValue(realtimeKeyboardAtom);
   const delayed = useAtomValue(delayedKeyboardAtom);
-  const globalRotation = new Euler(-Math.PI / 2, 0, 0);
 
   const options = useMemo(() => {
     const { presses, map } = realtime;
@@ -26,14 +28,12 @@ const Hyperspace = () => {
     }));
   }, [realtime, delayed]);
 
-  const green = useMemo(() => new Color(0, 1.5, 0), []);
-  const white = useMemo(() => new Color(0xffffff), []);
   const TextMaterial = useMemo(
     () =>
       new MeshBasicMaterial({
         color: realtime.label === delayed.label ? green : white,
         transparent: true,
-        opacity: 0.5
+        opacity: 1
       }),
     [realtime.label, delayed.label]
   );
@@ -53,6 +53,7 @@ const Hyperspace = () => {
           </Text>
           {options.map(({ pressed, key }, i, array) => (
             <group
+              key={key}
               rotation={[
                 0,
                 0,
@@ -81,13 +82,7 @@ const Hyperspace = () => {
                   />
                   <torusGeometry args={[1, 0.04, 16, 100]} />
                 </mesh>
-                <Text
-                  scale={[1, 1, 1]}
-                  color={[0, 2, 0]}
-                  // color={pressed ? [0, 0.5, 0] : [1, 1, 1]}
-                  anchorX={'center'}
-                  anchorY={'middle'}
-                >
+                <Text scale={[1, 1, 1]} anchorX={'center'} anchorY={'middle'}>
                   {key}
                 </Text>
               </group>
