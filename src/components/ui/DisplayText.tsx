@@ -8,7 +8,7 @@ const DisplayText = () => {
   const delayedKeyboard = useAtomValue(delayedKeyboardAtom);
 
   return (
-    <VStack className={cn(['items-center gap-5'])}>
+    <VStack className={cn(['items-center gap-5 z-100'])}>
       <span
         className={cn([
           'text-9xl font-bold',

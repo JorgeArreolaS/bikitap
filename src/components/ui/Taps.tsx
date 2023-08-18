@@ -41,7 +41,7 @@ const Taps = () => {
   }, [realtime, delayed]);
 
   return (
-    <VStack className="items-center justify-center gap-3 md:flex-row">
+    <VStack className="items-center justify-center gap-3 md:flex-row z-10">
       <HStack className="w-20"></HStack>
       <HStack className=" gap-1 md:gap-3 ">
         {options.map((item, i) => (

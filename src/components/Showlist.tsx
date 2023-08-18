@@ -11,7 +11,7 @@ const Showlist = () => {
   const [{ layout, layouts }, dispatchKeyboard] = useAtom(realtimeKeyboardAtom);
 
   return (
-    <VStack>
+    <VStack className='z-10 flex-col-reverse'>
       <Tabs
         aria-label="Dynamic tabs"
         items={layouts}

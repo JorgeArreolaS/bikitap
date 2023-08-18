@@ -5,8 +5,8 @@ function App() {
   return (
     <main className="h-screen bg-background text-foreground dark">
       <div className="relative h-screen w-full">
-        <Hyperspace />
         <KeyboardOverlay />
+        <Hyperspace />
       </div>
     </main>
   );
