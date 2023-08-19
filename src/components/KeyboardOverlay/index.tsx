@@ -83,7 +83,6 @@ const KeyboardOverlay = () => {
           </VStack>
         </VStack>
       </HStack>
-      <Taps />
     </VStack>
   );
 };

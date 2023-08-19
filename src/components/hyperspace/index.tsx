@@ -10,11 +10,10 @@ import { delayedKeyboardAtom, realtimeKeyboardAtom } from 'hooks/useTap';
 import { useAtomValue } from 'jotai';
 import { Color, Euler, MeshBasicMaterial } from 'three';
 import { Bloom, EffectComposer } from '@react-three/postprocessing';
+import KeyFragment from './keyboard/KeyFragment';
+import { COLORS } from 'core/threejs/consts';
 
 const globalRotation = new Euler(-Math.PI / 2, 0, 0);
-const green = new Color(0, 1.5, 0);
-const white = new Color(0xffffff);
-
 const Hyperspace = () => {
   const realtime = useAtomValue(realtimeKeyboardAtom);
   const delayed = useAtomValue(delayedKeyboardAtom);
@@ -31,7 +30,7 @@ const Hyperspace = () => {
   const TextMaterial = useMemo(
     () =>
       new MeshBasicMaterial({
-        color: realtime.label === delayed.label ? green : white,
+        color: realtime.label === delayed.label ? COLORS.GREEN : COLORS.WHITE,
         transparent: true,
         opacity: 1
       }),
@@ -51,43 +50,22 @@ const Hyperspace = () => {
           <Text scale={[2, 2, 2]} material={TextMaterial}>
             {realtime.label}
           </Text>
-          {options.map(({ pressed, key }, i, array) => (
-            <group
-              key={key}
-              rotation={[
-                0,
-                0,
-                -((Math.PI * 2) / array.length) * i +
-                  Math.PI / 2 +
-                  ((Math.PI * 2) / array.length) * 2
-              ]}
-            >
-              <group
-                scale={pressed ? 1.05 : 1}
-                position={[3, 0, 0]}
-                rotation={[
-                  0,
-                  0,
-                  ((Math.PI * 2) / array.length) * i -
-                    ((Math.PI * 2) / array.length) * 2 -
-                    Math.PI / 2
-                ]}
-              >
-                <mesh key={i}>
-                  <meshBasicMaterial
-                    color={pressed ? [0, 1, 0] : [1, 1, 1]}
-                    opacity={1}
-                    // transparent={true}
-                    toneMapped={false}
-                  />
-                  <torusGeometry args={[1, 0.04, 16, 100]} />
-                </mesh>
-                <Text scale={[1, 1, 1]} anchorX={'center'} anchorY={'middle'}>
-                  {key}
-                </Text>
+          <mesh></mesh>
+          {options.map(({ pressed, key }, i, array) => {
+            const angle =
+              ((Math.PI * 2) / array.length) * i -
+              ((Math.PI * 2) / array.length) * 2;
+            const angleText = Number(angle * (180 / Math.PI)).toFixed(0);
+            return (
+              <group key={key} rotation={[0, 0, -angle + Math.PI / 2]}>
+                <KeyFragment
+                  label={key}
+                  pressed={pressed}
+                  angle={angle}
+                />
               </group>
-            </group>
-          ))}
+            );
+          })}
         </group>
         <EffectComposer>
           <Bloom
