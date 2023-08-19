@@ -50,22 +50,30 @@ const Hyperspace = () => {
           <Text scale={[2, 2, 2]} material={TextMaterial}>
             {realtime.label}
           </Text>
-          <mesh></mesh>
-          {options.map(({ pressed, key }, i, array) => {
-            const angle =
-              ((Math.PI * 2) / array.length) * i -
-              ((Math.PI * 2) / array.length) * 2;
-            const angleText = Number(angle * (180 / Math.PI)).toFixed(0);
-            return (
-              <group key={key} rotation={[0, 0, -angle + Math.PI / 2]}>
-                <KeyFragment
-                  label={key}
-                  pressed={pressed}
-                  angle={angle}
-                />
-              </group>
-            );
-          })}
+          <group>
+            <mesh>
+              <meshBasicMaterial
+                color={COLORS.GREEN}
+                opacity={0.01}
+                transparent={true}
+                toneMapped={false}
+              />
+              <torusGeometry args={[3, 0.02, 8, 40]} />
+            </mesh>
+            {options.map(({ pressed, key }, i, array) => {
+              const prev =
+                Math.PI / 2 +
+                ((Math.PI * 2) / array.length) * i -
+                ((Math.PI * 2) / array.length) * 2;
+              const angle = prev < 0 ? Math.PI * 2 + prev : prev;
+              const angleText = Number(angle * (180 / Math.PI)).toFixed(0);
+              return (
+                <group key={key} rotation={[0, 0, -angle + Math.PI / 2]}>
+                  <KeyFragment label={key} pressed={pressed} angle={angle} />
+                </group>
+              );
+            })}
+          </group>
         </group>
         <EffectComposer>
           <Bloom
@@ -73,7 +81,7 @@ const Hyperspace = () => {
             mipmapBlur
             luminanceSmoothing={0.4}
             radius={0.6}
-            height={300}
+            height={10}
           />
         </EffectComposer>
       </Canvas>

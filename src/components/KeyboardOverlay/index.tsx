@@ -64,7 +64,7 @@ const KeyboardOverlay = () => {
 
   return (
     <VStack className="flex h-full w-full flex-col gap-5 p-2 absolute inset-0">
-      <Showlist />
+      {/* <Showlist /> */}
       <HStack className="h-full gap-3">
         <VStack className="w-full">
           <VStack className="relative">
